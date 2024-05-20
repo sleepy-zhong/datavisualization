@@ -1,0 +1,21 @@
+body{
+	margin: 0;
+	padding: 0;
+}
+
+.row{
+	display: flex;
+	flex-direction: row;
+}
+
+.col{
+	display: flex;
+	flex-direction: column;
+}
+.left {
+	float: left;
+}
+
+.right {	
+	float: right;
+}

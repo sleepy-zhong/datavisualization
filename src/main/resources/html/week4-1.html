@@ -1,0 +1,90 @@
+<!-- <!DOCTYPE html/> -->
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>数据可视化案例1</title>
+    <script src="v2.6.10/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://unpkg.zhimg.com/axios/dist/axios.min.js"></script>
+    <script src="httpConfig.js"></script>
+
+    <script src="https://code.hcharts.cn/highcharts/highcharts.js"></script>
+    <script src="https://code.hcharts.cn/highcharts/modules/exporting.js"></script>
+    <script src="https://code.hcharts.cn/highcharts/modules/series-label.js"></script>
+    <script src="https://code.hcharts.cn/highcharts/modules/oldie.js"></script>
+    <script src="https://code.hcharts.cn/plugins/zh_cn.js"></script>
+</head>
+<body>
+<div id="app">
+<!--    <button onclick="loadG()">刷新</button>-->
+    <div id="container" style="max-width:800px;height:400px"></div>
+</div>
+<script type="text/javascript">
+    var chart = Highcharts.chart('container', {
+        title: {
+            text: '消费价格指数'
+        },
+        subtitle: {
+            text: '数据来源：国家统计局'
+        },
+        xAxis: {
+            type: 'category', // 或者 'category'，取决于你的数据类型
+            title: {
+                text: '月份'
+            }
+        },
+        yAxis: {
+            title: {
+                text: '消费价格指数'
+            }
+        },
+        series: [],
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle'
+        },
+
+    });
+
+    function loadG() {
+        chart.showLoading("Loading....");
+        var consumerfood = []
+        var consumerclothing = []
+        var consumerdate = []
+        axios.post('http://localhost:8080/api/consumer/selectAllConsumer').then(function(res) {
+            if (res.data.code === 1) {
+                data = res.data.data
+                datalength = res.data.data.length
+                for (i = 0; i < datalength; i++) {
+                    consumerfood[i] = data[i].food
+                    consumerclothing[i] = data[i].clothing
+                    consumerdate[i]=data[i].date
+                }
+                var consumerfoodseries = {
+                    data: consumerfood,
+                    name: "食品类"
+                }
+                var consumerclothingseries = {
+                    data: consumerclothing,
+                    name: "衣着类"
+                }
+                chart.addSeries(consumerfoodseries)
+                chart.addSeries(consumerclothingseries)
+                chart.xAxis[0].setCategories(consumerdate, true);
+            } else {
+                window.alert(res.data.msg)
+            }
+        }).catch(function(err) {
+            console.log("请求失败");
+        })
+        chart.hideLoading("Loading....");
+    }
+
+    // 自执行函数
+    (function() {
+        loadG()
+    })();
+
+</script>
+</body>
+</html>
