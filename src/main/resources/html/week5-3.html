@@ -3,8 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="v2.6.10/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://unpkg.zhimg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.hcharts.cn/highcharts/highcharts.js"></script>
 </head>
-<body>
+<body style="margin: 0;padding: 0">
+<div style="display: flex;flex-direction: column;">
+    <div style="display: flex;flex-direction: row;">
+        <div class="t_part">
 
+        </div>
+        <div class="t_part"></div>
+        <div class="t_part"></div>
+    </div>
+    <div style="display: flex;flex-direction: row;">
+        <div class="t_part">
+            <div id="container" style="max-width:600px;height:240px;margin: 10px"></div>
+        </div>
+        <div class="t_part"></div>
+    </div>
+</div>
 </body>
+<script type="text/javascript">
+    var chart = Highcharts.chart('container', {
+        chart: {
+            type: 'column' // 平滑的曲线图：spline
+        },
+        title: {
+            text: '第二个例子',
+            align: 'center'
+        },
+        xAxis: {
+            crosshair: true,
+            accessibility: {
+                description: '类型'
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: '总数量'
+            }
+        },
+        tooltip: {
+            valueSuffix: ' (个)'
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [
+        ]
+    });
+
+    function loadG() {
+        chart.showLoading("Loading....");
+        var consumernumber = []
+        var consumertypes = []
+        axios.post('http://localhost:8080/api/sum/selectAllSum').then(function(res) {
+            if (res.data.code === 1) {
+                data = res.data.data
+                datalength = res.data.data.length
+                for (i = 0; i < datalength; i++) {
+                    consumernumber[i] = data[i].number
+                    consumertypes[i]=data[i].types
+                }
+                var consumernumberseries = {
+                    data: consumernumber,
+                    name: "类型"
+                }
+                chart.addSeries(consumernumberseries)
+                chart.xAxis[0].setCategories(consumertypes, true);
+            } else {
+                window.alert(res.data.msg)
+            }
+        }).catch(function(err) {
+            console.log("请求失败");
+        })
+        chart.hideLoading("Loading....");
+    }
+
+    // 自执行函数
+    (function() {
+        loadG()
+    })();
+
+</script>
+
 </html>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .t_part {
+        margin: 10px;
+        height: 260px;
+        width: 800px;
+        /*background-color: #3ea751;*/
+        border-radius: 10px;
+        border:1px solid #cccccc;
+    }
+</style>

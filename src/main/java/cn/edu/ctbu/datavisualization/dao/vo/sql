@@ -1,0 +1,5 @@
+数量统计SQL
+SELECT tut.user_type, COUNT(*) as user_count
+FROM t_user AS tu
+JOIN t_user_type AS tut ON tu.user_type_id = tut.id
+GROUP BY tut.user_type;
