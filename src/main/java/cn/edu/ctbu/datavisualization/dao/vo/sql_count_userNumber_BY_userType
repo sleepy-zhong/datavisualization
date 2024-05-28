@@ -1,0 +1,4 @@
+SELECT ut.user_type, COUNT(*) AS count
+FROM t_user AS u
+JOIN t_user_type AS ut ON u.user_type_id = ut.id
+GROUP BY ut.user_type;

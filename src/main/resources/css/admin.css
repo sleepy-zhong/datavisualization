@@ -187,11 +187,12 @@ li {
 	top: 110px;
 	left: 180px;
 	padding: 15px;
-	padding-right: 0px;
 	padding-bottom: 0px;
 	overflow: auto;
 	border-top: 1px solid #b5cfd9;
 	padding-right: 15px;
+	overflow-y: hidden;
+	background-color: #fafafa;
 }
 
 .content {

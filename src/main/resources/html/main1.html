@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="v2.6.10/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://unpkg.zhimg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.hcharts.cn/highcharts/highcharts.js"></script>
+</head>
+<body style="background-color: #fafafa;">
+<!--<div style="overflow-y: hidden">-->
+    <!--第一行-->
+    <div style="display: flex;flex-direction: row;">
+        <div class="t_main_in"></div>
+        <div class="t_main_in"></div>
+        <div class="t_main_in"></div>
+        <div class="t_main_in"></div>
+        <div class="t_main_in"></div>
+    </div>
+    <!--第二行-->
+    <div style="display: flex;flex-direction: row;">
+        <div class="t_main"></div>
+        <div class="t_main"></div>
+        <div class="t_main"></div>
+    </div>
+    <!--第三行-->
+    <div style="display: flex;flex-direction: row;">
+        <div class="t_main">
+            <div id="container" style="max-width:600px;height:300px"></div>
+        </div>
+        <div class="t_main">
+            <div id="container1" style="max-width:600px;height:300px"></div>
+
+        </div>
+    </div>
+<!--</div>-->
+</body>
+
+<script type="text/javascript">
+    var chart = Highcharts.chart('container', {
+        chart: {
+            type: 'column' // 平滑的曲线图：spline
+        },
+        title: {
+            text: '商品类型统计',
+            align: 'center'
+        },
+        subtitle: {
+            text: '数据来源：数据库',
+            align: 'left'
+        },
+        xAxis: {
+            crosshair: true,
+            accessibility: {
+                description: '类型'
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: '总数量'
+            }
+        },
+        tooltip: {
+            valueSuffix: ' (个)'
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: []
+    });
+
+    function loadG() {
+        chart.showLoading("Loading....");
+        var consumernumber = []
+        var consumertypes = []
+        axios.post('http://localhost:8080/api/sum/selectAllSum').then(function (res) {
+            if (res.data.code === 1) {
+                data = res.data.data
+                datalength = res.data.data.length
+                for (i = 0; i < datalength; i++) {
+                    consumernumber[i] = data[i].number
+                    consumertypes[i] = data[i].types
+                }
+                var consumernumberseries = {
+                    data: consumernumber,
+                    name: "类型"
+                }
+                chart.addSeries(consumernumberseries)
+                chart.xAxis[0].setCategories(consumertypes, true);
+            } else {
+                window.alert(res.data.msg)
+            }
+        }).catch(function (err) {
+            console.log("请求失败");
+        })
+        chart.hideLoading("Loading....");
+    }
+
+
+    var chart1 = Highcharts.chart('container1', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: '不同用户类型所占比例',
+            align: 'center'
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.percentage:.1f}%</b>'
+        },
+        accessibility: {
+            point: {
+                valueSuffix: '%'
+            }
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: true
+            }
+        },
+        series: []
+    });
+
+    function loadG1() {
+        chart1.showLoading("Loading....");
+        var userCount = []
+        var userType = []
+        axios.post('http://localhost:8080/api/user-count/count-user-number').then(function (res) {
+            if (res.data.code === 1) {
+                data = res.data.data
+                datalength = res.data.data.length
+                for (i = 0; i < datalength; i++) {
+                    userCount[i] = data[i].userCount
+                    userType[i] = data[i].userType
+                }
+                var userCountseries = {
+                    name: userType,
+                    data: userType.map(function (type, index) {
+                        return [type, userCount[index]]; // 将 userType 和 userCount 组合成 [类型, 数量] 的形式
+                    })
+                }
+                chart1.addSeries(userCountseries)
+
+                // 将 userType 和 userCount 组合成 [类型, 数量] 的形式
+                var seriesData = userType.map((type, index) => [type, userCount[index]]);
+                var userCountseries1 = {
+                    type: 'pie',
+                    name: 'Browsers', // 系列名称
+                    data: seriesData
+                };
+                console.log(userCountseries1.data);
+                chart1.addSeriesAsDrillData(userCountseries1, 'browsers');
+            } else {
+                window.alert(res.data.msg)
+            }
+        }).catch(function (err) {
+            console.log("请求失败");
+        })
+        chart1.hideLoading("Loading....");
+    }
+
+    // 自执行函数
+    (function () {
+        loadG()
+        loadG1()
+    })();
+
+</script>
+</html>
+<style>
+    .t_main {
+        height: 300px;
+        width: 900px;
+        margin: 10px;
+        border: 1px solid #adadad;
+        background-color: #ffffff;
+    }
+
+    .t_main1 {
+        height: 200px;
+        width: 100%;
+        margin: 10px;
+        border: 1px solid #adadad;
+        background-color: #ffffff;
+    }
+
+    .t_main_in {
+        height: 160px;
+        width: 25%;
+        margin: 10px;
+        border: 1px solid #adadad;
+        background-color: #ffffff;
+    }
+</style>
