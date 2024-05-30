@@ -1,6 +1,7 @@
 package cn.edu.ctbu.datavisualization.mapper;
 
 import cn.edu.ctbu.datavisualization.dao.vo.UserCountVO;
+import cn.edu.ctbu.datavisualization.dao.vo.UserNumberVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -19,4 +20,7 @@ public interface UserCountVOMapper {
             "JOIN t_user_type AS tut ON tu.user_type_id = tut.id\n" +
             "GROUP BY tut.user_type;")
     List<UserCountVO> countUserNumber();
+
+    @Select("SELECT COUNT(*) AS allUser FROM `t_user`")
+    UserNumberVO userNUmber();
 }

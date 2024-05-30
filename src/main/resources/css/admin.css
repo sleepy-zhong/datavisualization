@@ -13,7 +13,6 @@ textarea {
 	width: 100%;
 	height: 100%;
 	position: absolute;
-	background: url(../image/bg.jpg)
 }
 
 .panel {
@@ -79,7 +78,6 @@ li {
 }
 
 .loginbox {
-	background: url(../images/tmbg-white.png);
 	border: 0px;
 }
 
@@ -87,7 +85,6 @@ li {
 .header {
 	height: 70px;
 	overflow: hidden;
-	background: url(../images/bg.jpg) no-repeat 0 -1000px;
 }
 
 .head-l {
@@ -114,7 +111,6 @@ li {
 
 .leftnav-title {
 	height: 50px;
-	background: url(../images/bg.jpg) no-repeat 0 -1000px;
 	color: #FFF;
 	padding-left: 22px;
 	font-size: 14px;

@@ -2,6 +2,7 @@ package cn.edu.ctbu.datavisualization.controller;
 
 import cn.edu.ctbu.datavisualization.dao.Sum;
 import cn.edu.ctbu.datavisualization.dao.vo.UserCountVO;
+import cn.edu.ctbu.datavisualization.dao.vo.UserNumberVO;
 import cn.edu.ctbu.datavisualization.enums.Result;
 import cn.edu.ctbu.datavisualization.server.SumServer;
 import cn.edu.ctbu.datavisualization.server.UserCountVOServer;
@@ -30,6 +31,14 @@ public class UserCountVOController {
     @PostMapping(value = "/count-user-number")
     public Result countUserNumber() {
         List<UserCountVO> userCountVOS = UserCountVOServer.countUserNumber();
+        return Result.success(userCountVOS);
+    }
+
+
+    @ApiOperation("API4:总用户数量")
+    @PostMapping(value = "/user-number")
+    public Result userNumber() {
+        UserNumberVO userCountVOS = UserCountVOServer.userNUmber();
         return Result.success(userCountVOS);
     }
 

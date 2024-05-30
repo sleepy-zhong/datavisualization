@@ -9,31 +9,36 @@
 </head>
 <body style="background-color: #fafafa;">
 <!--<div style="overflow-y: hidden">-->
-    <!--第一行-->
+<!--第一行-->
+<div id="app">
     <div style="display: flex;flex-direction: row;">
         <div class="t_main_in">
+            <div class="ta">已注册用户数量</div>
+            <div class="ta" style="font-size: 30px;margin-top: -30px">{{allUser}}</div>
         </div>
         <div class="t_main_in"></div>
         <div class="t_main_in"></div>
         <div class="t_main_in"></div>
         <div class="t_main_in"></div>
     </div>
-    <!--第二行-->
-    <div style="display: flex;flex-direction: row;">
-        <div class="t_main"></div>
-        <div class="t_main"></div>
-        <div class="t_main"></div>
+</div>
+
+<!--第二行-->
+<div style="display: flex;flex-direction: row;">
+    <div class="t_main"></div>
+    <div class="t_main"></div>
+    <div class="t_main"></div>
+</div>
+<!--第三行-->
+<div style="display: flex;flex-direction: row;">
+    <div class="t_main">
+        <div id="container" style="max-width:600px;height:300px"></div>
     </div>
-    <!--第三行-->
-    <div style="display: flex;flex-direction: row;">
-        <div class="t_main">
-            <div id="container" style="max-width:600px;height:300px"></div>
-        </div>
-        <div class="t_main">
-            <div id="container1" style="max-width:600px;height:300px"></div>
-        </div>
+    <div class="t_main">
+        <div id="container1" style="max-width:600px;height:300px"></div>
     </div>
-<!--</div>-->
+</div>
+
 </body>
 
 <script type="text/javascript">
@@ -73,34 +78,6 @@
         series: []
     });
 
-    function loadG() {
-        chart.showLoading("Loading....");
-        var consumernumber = []
-        var consumertypes = []
-        axios.post('http://localhost:8080/api/sum/selectAllSum').then(function (res) {
-            if (res.data.code === 1) {
-                data = res.data.data
-                datalength = res.data.data.length
-                for (i = 0; i < datalength; i++) {
-                    consumernumber[i] = data[i].number
-                    consumertypes[i] = data[i].types
-                }
-                var consumernumberseries = {
-                    data: consumernumber,
-                    name: "类型"
-                }
-                chart.addSeries(consumernumberseries)
-                chart.xAxis[0].setCategories(consumertypes, true);
-            } else {
-                window.alert(res.data.msg)
-            }
-        }).catch(function (err) {
-            console.log("请求失败");
-        })
-        chart.hideLoading("Loading....");
-    }
-
-
     var chart1 = Highcharts.chart('container1', {
         chart: {
             plotBackgroundColor: null,
@@ -133,7 +110,61 @@
         series: []
     });
 
-    function loadG1() {
+    var app = new Vue({
+        el: '#app',
+        data: {
+            allUser:0
+        },
+        created: function () {
+            this.loadG2()
+        },
+        methods: {
+            // 上方卡片
+            loadG2() {
+                // 由于JavaScript的作用域限制，在回调函数中无法直接访问Vue实例的this
+                var that =this
+                axios.post('http://localhost:8080/api/user-count/user-number').then(function (res) {
+                    if (res.data.code === 1) {
+                        that.allUser = res.data.data.allUser
+                    } else {
+                        window.alert(res.data.msg)
+                    }
+                }).catch(function (err) {
+                    console.log("请求失败");
+                })
+            }
+        }
+    })
+
+    // 柱状图
+  function  loadG() {
+        chart.showLoading("Loading....");
+        var consumernumber = []
+        var consumertypes = []
+        axios.post('http://localhost:8080/api/sum/selectAllSum').then(function (res) {
+            if (res.data.code === 1) {
+                data = res.data.data
+                datalength = res.data.data.length
+                for (i = 0; i < datalength; i++) {
+                    consumernumber[i] = data[i].number
+                    consumertypes[i] = data[i].types
+                }
+                var consumernumberseries = {
+                    data: consumernumber,
+                    name: "类型"
+                }
+                chart.addSeries(consumernumberseries)
+                chart.xAxis[0].setCategories(consumertypes, true);
+            } else {
+                window.alert(res.data.msg)
+            }
+        }).catch(function (err) {
+            console.log("请求失败");
+        })
+        chart.hideLoading("Loading....");
+    }
+    // 饼图
+   function loadG1() {
         chart1.showLoading("Loading....");
         var userCount = []
         var userType = []
@@ -152,7 +183,6 @@
                     })
                 }
                 chart1.addSeries(userCountseries)
-
                 // 将 userType 和 userCount 组合成 [类型, 数量] 的形式
                 var seriesData = userType.map((type, index) => [type, userCount[index]]);
                 var userCountseries1 = {
@@ -166,7 +196,7 @@
                 window.alert(res.data.msg)
             }
         }).catch(function (err) {
-            console.log("请求失败");
+            console.log("1请求失败");
         })
         chart1.hideLoading("Loading....");
     }
