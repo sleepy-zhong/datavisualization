@@ -10,7 +10,7 @@
 6. 界面文件：src/main/resources/html
 
 ### 20240530 首页可视化效果
-修改了中间部分的高度，从300px降到了100px
+取消了中间部分
 ![image](https://github.com/ALAN-SOFT/datavisualization/assets/44634241/16e68695-7c31-4ad1-94c3-d7665c1a5e0b)
 
 
