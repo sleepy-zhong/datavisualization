@@ -8,3 +8,8 @@
 4. 数据库文件：datavisualization.sql
 5. 后端主要文件：src/main/java/cn/edu/ctbu/datavisualization
 6. 界面文件：src/main/resources/html
+
+   ### 20240530 首页可视化效果
+   修改了中间部分的高度，从300px降到了100px
+   ![image](https://github.com/ALAN-SOFT/datavisualization/assets/44634241/940197c5-f0af-4723-8a63-9216444cfc68)
+
