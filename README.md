@@ -11,5 +11,6 @@
 
 ### 20240530 首页可视化效果
 修改了中间部分的高度，从300px降到了100px
-![image](https://github.com/ALAN-SOFT/datavisualization/assets/44634241/940197c5-f0af-4723-8a63-9216444cfc68)
+![image](https://github.com/ALAN-SOFT/datavisualization/assets/44634241/16e68695-7c31-4ad1-94c3-d7665c1a5e0b)
+
 
