@@ -11,7 +11,8 @@
 <!--<div style="overflow-y: hidden">-->
     <!--第一行-->
     <div style="display: flex;flex-direction: row;">
-        <div class="t_main_in"></div>
+        <div class="t_main_in">
+        </div>
         <div class="t_main_in"></div>
         <div class="t_main_in"></div>
         <div class="t_main_in"></div>
@@ -30,7 +31,6 @@
         </div>
         <div class="t_main">
             <div id="container1" style="max-width:600px;height:300px"></div>
-
         </div>
     </div>
 <!--</div>-->
@@ -188,19 +188,24 @@
         background-color: #ffffff;
     }
 
-    .t_main1 {
-        height: 200px;
-        width: 100%;
+    .t_main_in {
+        display: flex;
+        flex-direction: column;
+        height: 160px;
+        width: 240px;
         margin: 10px;
         border: 1px solid #adadad;
         background-color: #ffffff;
     }
 
-    .t_main_in {
+    .ta {
+        display: flex;
+        flex-direction: column;
         height: 160px;
-        width: 25%;
+        width: 92%;
         margin: 10px;
-        border: 1px solid #adadad;
-        background-color: #ffffff;
+        text-align: center;
+        padding-top: 12px;
+        font-size: 20px;
     }
 </style>
